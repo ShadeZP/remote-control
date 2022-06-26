@@ -8,7 +8,7 @@ export const mediator = new Transform({
 
     controller(command, arg1, arg2)
       .then((data) => {
-        console.log(`command ${data} success`);
+        console.log(`command ${command} success`);
 
         callback(null, data)
       })

@@ -4,13 +4,19 @@ import { controller } from './controller'
 export const mediator = new Transform({
   transform(this, chunk, encoding, callback) {
     const [command, arg1, arg2] = chunk.toString().trim().split(' ');
-    console.log(`${command}`)
+    console.log(`get command ${command}`);
+
     controller(command, arg1, arg2)
       .then((data) => {
-        console.log(`command ${data} success`)
+        console.log(`command ${data} success`);
+
         callback(null, data)
       })
-      .catch((error) => callback(error))
+      .catch((error) => {
+        console.log(`command ${command} fail`);
+
+        callback(error);
+      })
   },
 
   read() {

@@ -10,8 +10,6 @@
 
 `npm run start:dev`
 
-* App served @ `http://localhost:8181` with nodemon
-
 ---
 
 **Note**: replace `npm` with `yarn` in `package.json` if you use yarn.

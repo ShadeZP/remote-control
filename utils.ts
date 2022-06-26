@@ -1,5 +1,6 @@
 import robot from 'robotjs';
 import { Commands } from './models';
+import Jimp from 'jimp';
 
 function moveMouseUp(offset: string): string {
   const { x, y } = robot.getMousePos();
@@ -92,6 +93,11 @@ function drawRectangle(offsetX: number, offsetY: number): string {
   return Commands.drawRectangle;
 }
 
+function drawSquare(offset: number): string {
+  drawRectangle(offset, offset);
+  return Commands.drawSquare;
+}
+
 function drawLine(startX: number, startY: number, endX: number, endY: number): void {
   const lengthX = Math.abs(startX - endX);
   const lengthY = Math.abs(startY - endY);
@@ -127,12 +133,39 @@ function drawLine(startX: number, startY: number, endX: number, endY: number): v
   }
 }
 
+async function makeScreenshot(): Promise<string> {
+  console.log('makeScreenshot')
+  const { x, y } = robot.getMousePos();
+
+  const robotScreenPic = robot.screen.capture(x - 100, y - 100, 200, 200);
+  const image = new Jimp(robotScreenPic.width, robotScreenPic.height);
+
+  for (let x = 0; x < 200; x++) {
+    for (let y = 0; y < 200; y++) {
+      // hex is a string, rrggbb format
+      var hex = robotScreenPic.colorAt(x, y);
+      // Jimp expects an Int, with RGBA data,
+      // so add FF as 'full opaque' to RGB color
+      var num = parseInt(hex + "ff", 16)
+      // Set pixel manually
+      image.setPixelColor(num, x, y);
+    }
+  }
+
+
+  let base64 = await image.getBase64Async(Jimp.MIME_PNG);
+
+  return `${Commands.prntScrn} ${base64.split(',')[1]}`;
+}
+
 export {
   drawCircle,
   drawRectangle,
+  drawSquare,
   getMousePosition,
   moveMouseDown,
   moveMouseRight,
   moveMouseLeft,
   moveMouseUp,
+  makeScreenshot,
 }

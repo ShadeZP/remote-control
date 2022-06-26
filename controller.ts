@@ -7,9 +7,11 @@ import {
   getMousePosition,
   drawCircle,
   drawRectangle,
+  makeScreenshot,
+  drawSquare,
 } from './utils'
 
-export function controller(command: string, arg1?: string, arg2?: string): string {
+export async function controller(command: string, arg1?: string, arg2?: string): Promise<string> {
   switch (command) {
     case Commands.mouseUp:
       return moveMouseUp(arg1);
@@ -26,6 +28,8 @@ export function controller(command: string, arg1?: string, arg2?: string): strin
     case Commands.drawRectangle:
       return drawRectangle(Number(arg1), Number(arg2));
     case Commands.drawSquare:
-      return drawRectangle(Number(arg1), Number(arg1));
+      return drawSquare(Number(arg1));
+    case Commands.prntScrn:
+      return makeScreenshot();
   }
 }
